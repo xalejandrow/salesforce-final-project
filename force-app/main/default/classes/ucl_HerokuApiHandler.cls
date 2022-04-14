@@ -1,5 +1,7 @@
-public with sharing class ucl_HerokuApiHandler {
-    
+public class ucl_HerokuApiHandler {  
+
+    @future(callout=true)
+    @AuraEnabled
     public static void getHerokuData () {
 
         try {
@@ -25,7 +27,7 @@ public with sharing class ucl_HerokuApiHandler {
         }
         
     }
-    
+
     private static void insertHerokuData (String responseBody) {
 
         try {
@@ -37,6 +39,7 @@ public with sharing class ucl_HerokuApiHandler {
             List<Legal_Advisor__c> legalAdvisors = new List<Legal_Advisor__c>();
             List<Legal_Advisor__c> legalAdvisorsToDelete = new List<Legal_Advisor__c>();
             Set<String> setAccNum = new Set<String>();
+            Set<String> setAccNumDelCli = new Set<String>();
 
             // Insert all Legal Advisor when Account_Status__c = 'Enabled'
             for (Object legalAdvisor : results) {
@@ -55,6 +58,7 @@ public with sharing class ucl_HerokuApiHandler {
                     legalAdvisors.add(la);
                 }else {
                     legalAdvisorsToDelete.add(la);
+                    setAccNumDelCli.add(accountNumber);
                 }
             }
             upsert legalAdvisors Legal_Advisor__c.Account_Number__c;
@@ -64,9 +68,15 @@ public with sharing class ucl_HerokuApiHandler {
             for(Legal_Advisor__c legAdv :[SELECT z.Account_Number__c, z.Id  FROM Legal_Advisor__c z WHERE Account_Number__c IN: setAccNum] ){
                 legAdvMap.put(legAdv.Account_Number__c,legAdv);
             }
+            Map<String, Legal_Advisor__c> legAdvMapDelCli = new Map<String, Legal_Advisor__c>();
+            for(Legal_Advisor__c legAdvDelCli :[SELECT z.Account_Number__c, z.Id  FROM Legal_Advisor__c z WHERE Account_Number__c IN: setAccNumDelCli] ){
+                legAdvMapDelCli.put(legAdvDelCli.Account_Number__c,legAdvDelCli);
+            }
 
             // Insert all Legal Advisor Clients 
             List<Client__c> advisorClients = new List<Client__c>();
+            // List<Client__c> advisorClientsToDelete = new List<Client__c>();
+
             for (Object legalAdvisor : results) {
                 System.debug('\n\n-------\n legalAdvisor: ' + legalAdvisor + '\n\n-------\n');
                 Map<String, Object> legalAdvisorMap = (Map<String, Object>) legalAdvisor;
@@ -101,6 +111,8 @@ public with sharing class ucl_HerokuApiHandler {
             } 
             System.debug('Clients: ' + advisorClients);
             upsert advisorClients;
+
+            // VERIFICAR Los Client en BD que no vienen en en el JSON y que no tienen Created_By_Admin__c = true para BORRARLOS
             
         } catch (DmlException e) {
             System.debug('ERROR: ' + e.getMessage());
@@ -114,6 +126,7 @@ public with sharing class ucl_HerokuApiHandler {
     }
 
 
+    @AuraEnabled
     public static void deleteAll() {
 
         try {

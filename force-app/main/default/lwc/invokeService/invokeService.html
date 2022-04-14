@@ -1,0 +1,16 @@
+<template>
+    <div class="slds-m-top_small slds-m-bottom_medium">
+        <h2 class="slds-text-heading_small slds-m-bottom_small">
+            Get all Legaly Advisor Clients from Heroku API
+        </h2>
+
+        <!-- Brand variant: Identifies the primary action in a group of buttons -->
+        <lightning-button variant="brand" label="Import Data" title="Import Data" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+        <lightning-button variant="brand" label="Delete All Data From DB" title="Delete Data" onclick={handleClickDelete} class="slds-m-left_x-small"></lightning-button>
+
+    </div>
+
+    <div class="slds-m-vertical_medium">
+        <p>Status Process <span class="slds-text-heading_small">{clickedButtonLabel}</span></p>
+    </div>
+</template>

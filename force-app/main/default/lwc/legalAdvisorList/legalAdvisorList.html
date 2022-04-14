@@ -1,0 +1,39 @@
+<template>
+    <lightning-card title="Legal Advisors" icon-name="">
+		<div class="slds-card__body_inner">
+			<!-- Start Advisors list -->
+            <template if:true={legalAdvisors.data}>
+                <!-- <lightning-input type="search"
+                    onchange={handleSearchTermChange}
+                    variant="label-hidden"
+                    class="slds-var-m-bottom_small"
+                    label="Search"
+                    placeholder="Search for advisors"
+                    value={searchTerm}>
+                </lightning-input> -->
+				<lightning-layout multiple-rows="true" pull-to-boundary="small">
+                    <template for:each={legalAdvisors.data} for:item="advisor">
+						<lightning-layout-item key={advisor.Id} size="3" class="slds-var-p-around_x-small">
+							<!-- Start advisor tile -->
+							<!-- <c-advisor-tile advisor={advisor} onadvisorview={handleAdvisorView}></c-advisor-tile> -->
+							<!-- End advisor tile -->
+						</lightning-layout-item>
+					</template>
+				</lightning-layout>
+                <!-- No advisor found -->
+                <template if:false={hasResults}>
+                    <div class="slds-align_absolute-center slds-var-m-vertical_small">
+                        We did not find results...
+                    </div>
+                </template>
+			</template>
+			<!-- End advisor list -->
+			<!-- Data failed to load -->
+            <template if:true={legalAdvisor.error}>
+				<div class="slds-text-color_error">
+					An error occurred while loading the Legal Advisor list
+				</div>
+			</template>
+		</div>
+	</lightning-card>
+</template>
