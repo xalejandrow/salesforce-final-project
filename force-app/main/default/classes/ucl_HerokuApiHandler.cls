@@ -17,10 +17,10 @@ public with sharing class ucl_HerokuApiHandler {
             }
         } catch (Exception e) {
             System.debug('Error: ' + e.getMessage());
-            Error_Log__c error = new Error_log();
-            error.message = e.getMessage();
-            error.line = e.getLineNumber();
-            error.type = e.getTypeName();
+            Error_Log__c error = new Error_Log__c();
+            error.Message__c = e.getMessage();
+            error.Line__c = String.valueOf(e.getLineNumber());
+            error.Type__c = e.getTypeName();
             insert error;
         }
         
@@ -104,6 +104,11 @@ public with sharing class ucl_HerokuApiHandler {
             
         } catch (DmlException e) {
             System.debug('ERROR: ' + e.getMessage());
+            Error_Log__c error = new Error_Log__c();
+            error.Message__c = e.getMessage();
+            error.Line__c = String.valueOf(e.getLineNumber());
+            error.Type__c = e.getTypeName();
+            insert error;
         }
     	
     }
@@ -116,10 +121,10 @@ public with sharing class ucl_HerokuApiHandler {
             delete legalAdvisors;
         } catch (DmlException e) {
             System.debug('delete Error: ' + e.getMessage());
-            Error_Log__c error = new Error_log();
-            error.message = e.getMessage();
-            error.line = e.getLineNumber();
-            error.type = e.getTypeName();
+            Error_Log__c error = new Error_Log__c();
+            error.Message__c = e.getMessage();
+            error.Line__c = String.valueOf(e.getLineNumber());
+            error.Type__c = e.getTypeName();
             insert error;
         }
         
