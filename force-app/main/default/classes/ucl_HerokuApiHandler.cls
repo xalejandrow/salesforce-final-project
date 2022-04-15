@@ -69,10 +69,10 @@ public class ucl_HerokuApiHandler {
             for(Legal_Advisor__c legAdv :[SELECT z.Account_Number__c, z.Id  FROM Legal_Advisor__c z WHERE Account_Number__c IN: setAccNum] ){
                 legAdvMap.put(legAdv.Account_Number__c,legAdv);
             }
-            Map<String, Legal_Advisor__c> legAdvMapDelCli = new Map<String, Legal_Advisor__c>();
-            for(Legal_Advisor__c legAdvDelCli :[SELECT z.Account_Number__c, z.Id  FROM Legal_Advisor__c z WHERE Account_Number__c IN: setAccNumDelCli] ){
-                legAdvMapDelCli.put(legAdvDelCli.Account_Number__c,legAdvDelCli);
-            }
+            // Map<String, Legal_Advisor__c> legAdvMapDelCli = new Map<String, Legal_Advisor__c>();
+            // for(Legal_Advisor__c legAdvDelCli :[SELECT z.Account_Number__c, z.Id  FROM Legal_Advisor__c z WHERE Account_Number__c IN: setAccNumDelCli] ){
+            //     legAdvMapDelCli.put(legAdvDelCli.Account_Number__c,legAdvDelCli);
+            // }
 
             // Insert all Legal Advisor Clients 
             List<Client__c> advisorClients = new List<Client__c>();
@@ -100,6 +100,7 @@ public class ucl_HerokuApiHandler {
                         cli.Client_Number__c = accountNumber + (String) clientsMap.get('ClientNumber');
                         cli.First_Name__c = (String) clientsMap.get('FirstName');
                         cli.Last_Name__c = (String) clientsMap.get('LastName');
+                        cli.Name = (String) clientsMap.get('LastName') + ', ' + (String) clientsMap.get('FirstName');
                         cli.Email__c = (String) clientsMap.get('Email');
                         cli.Phone__c = (String) clientsMap.get('Phone');
                         cli.Address__c = (String) clientsMap.get('Address');
