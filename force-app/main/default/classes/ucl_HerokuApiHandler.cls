@@ -40,6 +40,7 @@ public class ucl_HerokuApiHandler {
             List<Legal_Advisor__c> legalAdvisorsToDelete = new List<Legal_Advisor__c>();
             Set<String> setAccNum = new Set<String>();
             Set<String> setAccNumDelCli = new Set<String>();
+            Set<String> setCliAccNum = new Set<String>();
 
             // Insert all Legal Advisor when Account_Status__c = 'Enabled'
             for (Object legalAdvisor : results) {
@@ -62,8 +63,8 @@ public class ucl_HerokuApiHandler {
                 }
             }
             upsert legalAdvisors Legal_Advisor__c.Account_Number__c;
-            System.debug('Legal Advisors: ' + legalAdvisors);
-            System.debug('Legal Advisors To Delete: ' + legalAdvisorsToDelete);
+            // System.debug('Legal Advisors: ' + legalAdvisors);
+            // System.debug('Legal Advisors To Delete: ' + legalAdvisorsToDelete);
             Map<String, Legal_Advisor__c> legAdvMap = new Map<String, Legal_Advisor__c>();
             for(Legal_Advisor__c legAdv :[SELECT z.Account_Number__c, z.Id  FROM Legal_Advisor__c z WHERE Account_Number__c IN: setAccNum] ){
                 legAdvMap.put(legAdv.Account_Number__c,legAdv);
@@ -78,12 +79,12 @@ public class ucl_HerokuApiHandler {
             // List<Client__c> advisorClientsToDelete = new List<Client__c>();
 
             for (Object legalAdvisor : results) {
-                System.debug('\n\n-------\n legalAdvisor: ' + legalAdvisor + '\n\n-------\n');
+                // System.debug('\n\n-------\n legalAdvisor: ' + legalAdvisor + '\n\n-------\n');
                 Map<String, Object> legalAdvisorMap = (Map<String, Object>) legalAdvisor;
                 String accountNumber = (String) legalAdvisorMap.get('AccountNumber');
                 String accountStatus = (String) legalAdvisorMap.get('AccountStatus');
-                System.debug('\n\n-------\n accountNumber: ' + accountNumber + '\n\n-------\n');
-                System.debug('\n\n-------\n accountStatus: ' + accountStatus + '\n\n-------\n');
+                // System.debug('\n\n-------\n accountNumber: ' + accountNumber + '\n\n-------\n');
+                // System.debug('\n\n-------\n accountStatus: ' + accountStatus + '\n\n-------\n');
             
                 if(accountStatus == 'Enabled'){
 
@@ -104,15 +105,27 @@ public class ucl_HerokuApiHandler {
                         cli.Address__c = (String) clientsMap.get('Address');
                         cli.Legal_Advisor__c = accountID;
                         
-                        advisorClients.add(cli);  
+                        advisorClients.add(cli);
+                        setCliAccNum.add(cli.Client_Number__c);
                     }         
                 }
                
             } 
-            System.debug('Clients: ' + advisorClients);
-            upsert advisorClients;
-
+            // System.debug('Clients: ' + advisorClients);
+            if(advisorClients.size() > 0){
+                upsert advisorClients Client_Number__c;
+            }
+            
             // VERIFICAR Los Client en BD que no vienen en en el JSON y que no tienen Created_By_Admin__c = true para BORRARLOS
+            // System.debug('advisorClients: '+advisorClients.size());
+            // System.debug('setCliAccNum: '+setCliAccNum);
+            List<Client__c> clientsToDel = [SELECT id, Client_Number__c, Created_By_Admin__c,Legal_Advisor__c 
+                                            FROM Client__c WHERE Client_Number__c NOT IN:setCliAccNum AND Created_By_Admin__c = false ];
+            // System.debug('clientsToDel: ' + clientsToDel.size());
+            if (clientsToDel.size() > 0) {
+                delete clientsToDel;
+            }
+            
             
         } catch (DmlException e) {
             System.debug('ERROR: ' + e.getMessage());
