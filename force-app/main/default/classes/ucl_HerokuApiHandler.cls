@@ -150,11 +150,6 @@ public class ucl_HerokuApiHandler {
             delete legalAdvisors;
         } catch (DmlException e) {
             System.debug('delete Error: ' + e.getMessage());
-            Error_Log__c error = new Error_Log__c();
-            error.Message__c = e.getMessage();
-            error.Line__c = String.valueOf(e.getLineNumber());
-            error.Type__c = e.getTypeName();
-            insert error;
         }
         
     }
