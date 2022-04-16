@@ -28,7 +28,8 @@ public class ucl_HerokuApiHandler {
         
     }
 
-    private static void insertHerokuData (String responseBody) {
+    
+    public static void insertHerokuData (String responseBody) {
 
         try {
 
@@ -37,7 +38,7 @@ public class ucl_HerokuApiHandler {
             
             //System.debug('\n\n-------\n results : ' + results + '\n\n-------\n');
             List<Legal_Advisor__c> legalAdvisors = new List<Legal_Advisor__c>();
-            List<Legal_Advisor__c> legalAdvisorsToDelete = new List<Legal_Advisor__c>();
+            // List<Legal_Advisor__c> legalAdvisorsToDelete = new List<Legal_Advisor__c>();
             Set<String> setAccNum = new Set<String>();
             Set<String> setAccNumDelCli = new Set<String>();
             Set<String> setCliAccNum = new Set<String>();
@@ -57,10 +58,11 @@ public class ucl_HerokuApiHandler {
                 
                 if(la.Account_Status__c == 'Enabled'){
                     legalAdvisors.add(la);
-                }else {
-                    legalAdvisorsToDelete.add(la);
-                    setAccNumDelCli.add(accountNumber);
                 }
+                // else {
+                //     legalAdvisorsToDelete.add(la);
+                //     setAccNumDelCli.add(accountNumber);
+                // }
             }
             upsert legalAdvisors Legal_Advisor__c.Account_Number__c;
             // System.debug('Legal Advisors: ' + legalAdvisors);
