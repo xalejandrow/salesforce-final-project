@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexTestSuite xmlns="http://soap.sforce.com/2006/04/metadata">
+    <testClassName>ucl_TestEmailError</testClassName>
+    <testClassName>ucl_TestHandle</testClassName>
+    <testClassName>ucl_TestSchedule</testClassName>
+</ApexTestSuite>
