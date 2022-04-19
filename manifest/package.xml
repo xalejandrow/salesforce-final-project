@@ -32,5 +32,11 @@
         <members>*</members>
         <name>StaticResource</name>
     </types>
+    <types>
+        <members>Client__c</members>
+        <members>Legal_Advisor__c</members>
+        <members>Error_Log__c</members>
+        <name>CustomObject</name>
+    </types>
     <version>54.0</version>
 </Package>
