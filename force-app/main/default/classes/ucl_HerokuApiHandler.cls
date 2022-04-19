@@ -145,13 +145,9 @@ public class ucl_HerokuApiHandler {
     @AuraEnabled
     public static void deleteAll() {
 
-        try {
             List<Legal_Advisor__c> legalAdvisors = [SELECT Id FROM Legal_Advisor__c];
             delete legalAdvisors;
-        } catch (DmlException e) {
-            System.debug('delete Error: ' + e.getMessage());
-        }
-        
+       
     }
     
 }
