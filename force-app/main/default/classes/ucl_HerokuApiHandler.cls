@@ -10,9 +10,7 @@ public class ucl_HerokuApiHandler {
             request.setEndpoint('https://altimetrik-bootcamp.herokuapp.com/LegalAccounts');
             request.setMethod('GET');
             HttpResponse response = http.send(request);
-            
-            //System.debug('\n\n-------\n httpresponse: ' + response + '\n\n-------\n');
-            
+        
             // If the request is successful, parse the JSON response.
             if(response.getStatusCode() == 200) {
                 ucl_HerokuApiHandler.insertHerokuData(response.getBody());
@@ -81,19 +79,15 @@ public class ucl_HerokuApiHandler {
             // List<Client__c> advisorClientsToDelete = new List<Client__c>();
 
             for (Object legalAdvisor : results) {
-                // System.debug('\n\n-------\n legalAdvisor: ' + legalAdvisor + '\n\n-------\n');
                 Map<String, Object> legalAdvisorMap = (Map<String, Object>) legalAdvisor;
                 String accountNumber = (String) legalAdvisorMap.get('AccountNumber');
                 String accountStatus = (String) legalAdvisorMap.get('AccountStatus');
-                // System.debug('\n\n-------\n accountNumber: ' + accountNumber + '\n\n-------\n');
-                // System.debug('\n\n-------\n accountStatus: ' + accountStatus + '\n\n-------\n');
-            
+               
                 if(accountStatus == 'Enabled'){
 
                     String accountID = legAdvMap.get(accountNumber).ID;
 
                     List<Object> clients = (List<Object>) legalAdvisorMap.get('Clients');
-                    // System.debug('\n\n-------\n clients: ' + clients + '\n\n-------\n');
 
                     for (Object client : clients) {
                         Map<String, Object> clientsMap = (Map<String, Object>) client;
@@ -114,17 +108,14 @@ public class ucl_HerokuApiHandler {
                 }
                
             } 
-            // System.debug('Clients: ' + advisorClients);
+
             if(advisorClients.size() > 0){
                 upsert advisorClients Client_Number__c;
             }
             
-            // VERIFICAR Los Client en BD que no vienen en en el JSON y que no tienen Created_By_Admin__c = true para BORRARLOS
-            // System.debug('advisorClients: '+advisorClients.size());
-            // System.debug('setCliAccNum: '+setCliAccNum);
+           
             List<Client__c> clientsToDel = [SELECT id, Client_Number__c, Created_By_Admin__c,Legal_Advisor__c 
                                             FROM Client__c WHERE Client_Number__c NOT IN:setCliAccNum AND Created_By_Admin__c = false ];
-            // System.debug('clientsToDel: ' + clientsToDel.size());
             if (clientsToDel.size() > 0) {
                 delete clientsToDel;
             }

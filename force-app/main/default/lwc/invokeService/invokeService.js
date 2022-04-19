@@ -6,7 +6,7 @@ import ucl_herokuDelete from '@salesforce/apex/ucl_HerokuApiHandler.deleteAll';
 
 export default class InvokeService extends LightningElement {
     // @wire(ucl_herokuApi)
-    clickedButtonLabel = '';
+    // clickedButtonLabel = '';
     _title = 'Import Data';
     message = '';
     variant = 'success';
@@ -20,16 +20,15 @@ export default class InvokeService extends LightningElement {
     handleClick(event) {
         try {
             ucl_herokuApi();
-            // ucl_herokuApi.getHerokuData();
-        // this.clickedButtonLabel = event.target.label;
+          
         
-            this.clickedButtonLabel = "Process Completed";
+            // this.clickedButtonLabel = "Process Completed";
             this.message = "Process Completed";
             this.variant = 'success';
             this.showNotification();
     
         } catch (error) {
-            this.clickedButtonLabel = "Process Error";
+            // this.clickedButtonLabel = "Process Error";
             this.message = "Process Error";
             this.variant = "error";
             this.showNotification();
@@ -45,13 +44,13 @@ export default class InvokeService extends LightningElement {
             // ucl_herokuApi.deleteAll();
         // this.clickedButtonLabel = event.target.label;
         
-            this.clickedButtonLabel = "Records Deleted";
+            // this.clickedButtonLabel = "Records Deleted";
             this.message = "Records Deleted";
             this.variant = "info";
             this.showNotification();
     
         } catch (error) {
-            this.clickedButtonLabel = "Process Error";
+            // this.clickedButtonLabel = "Process Error";
             this.message = "Process Error";
             this.variant = "error";
             this.showNotification();
