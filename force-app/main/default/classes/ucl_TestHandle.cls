@@ -10,7 +10,7 @@ public class ucl_TestHandle {
     static void testCallApi(){
         
         StaticResourceCalloutMock mock = new StaticResourceCalloutMock();
-        mock.setStaticResource('LegalAdvisorClientErr');
+        mock.setStaticResource('LegalAdvisorClient');
         mock.setStatusCode(200);
         mock.setHeader('Content-Type', 'application/json;charset=UTF-8');
         // Associate the callout with a mock response
@@ -23,7 +23,7 @@ public class ucl_TestHandle {
     static void testCallApiError(){
         
         StaticResourceCalloutMock mock = new StaticResourceCalloutMock();
-        mock.setStaticResource('LegalAdvisorClient');
+        mock.setStaticResource('LegalAdvisorClientErr');
         mock.setStatusCode(404);
         mock.setHeader('Content-Type', 'application/json;charset=UTF-8');
         // Associate the callout with a mock response
